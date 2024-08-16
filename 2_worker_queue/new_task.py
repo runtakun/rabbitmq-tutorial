@@ -9,15 +9,18 @@ def main():
 
     channel.queue_declare(queue='task_queue', durable=True)
 
-    message = ' '.join(sys.argv[1:]) or "Hello World!"
-    channel.basic_publish(
-        exchange='',
-        routing_key='task_queue',
-        body=message,
-        properties=pika.BasicProperties(
-            delivery_mode=pika.DeliveryMode.Persistent
-        ))
-    print(f" [x] Sent {message}")
+    for i, x in enumerate(['First', 'Second', 'Third', 'Fourth', 'Fifth']):
+        dots = '.' * (i + 1)
+        message = f" [x] Sent {x}{dots}"
+        channel.basic_publish(
+            exchange='',
+            routing_key='task_queue',
+            body=message,
+            properties=pika.BasicProperties(
+                delivery_mode=pika.DeliveryMode.Persistent
+            ))
+        print(f" [x] Sent {message}")
+
     connection.close()
 
 
